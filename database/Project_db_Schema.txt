@@ -156,6 +156,46 @@ CREATE TABLE "Sub Con Works" (Subcontract TEXT REFERENCES "Sub Contract" ("Sub C
 CREATE TABLE "Sub Contract IP" (IP INTEGER, Item INTEGER, Date DATE, Type TEXT REFERENCES "SC IP Type" (Type) ON DELETE CASCADE ON UPDATE CASCADE, "Contract Work ref" TEXT REFERENCES "Sub Con Works" ON DELETE CASCADE ON UPDATE CASCADE, "VO ref" TEXT REFERENCES "Sub Contract VO" ("VO ref") ON DELETE CASCADE ON UPDATE CASCADE, "Contra Charge ref" TEXT REFERENCES "Contra Charge" ("CC No"), "Applied Amount" REAL, "Certified Amount" REAL, Remark REAL, PRIMARY KEY (IP, Item));
 
 
+-- "Sub Contract IP Application" definition
+
+CREATE TABLE "Sub Contract IP Application" (
+    "Sub Contract No" TEXT REFERENCES "Sub Contract" ("Sub Contract No") ON DELETE CASCADE ON UPDATE CASCADE,
+    "IP" INTEGER,
+    "Draft Date" DATE,
+    "Issue Date" DATE,
+    "Approved Date" DATE,
+    "Payment Date" DATE,
+    "Accumulated Applied Amount" REAL,
+    "Previous Applied Amount" REAL,
+    "This Applied Amount" REAL,
+    "Certified Amount" REAL,
+    "Paid Amount" REAL,
+    "Remark" TEXT,
+    PRIMARY KEY ("Sub Contract No", "IP")
+);
+
+
+-- "Sub Contract IP Item" definition
+
+CREATE TABLE "Sub Contract IP Item" (
+    "Sub Contract No" TEXT REFERENCES "Sub Contract" ("Sub Contract No") ON DELETE CASCADE ON UPDATE CASCADE,
+    "IP" INTEGER,
+    "Item" INTEGER,
+    "Type" TEXT REFERENCES "SC IP Type" (Type) ON DELETE CASCADE ON UPDATE CASCADE,
+    "Contract Work ref" TEXT REFERENCES "Sub Con Works" ON DELETE CASCADE ON UPDATE CASCADE,
+    "VO ref" TEXT REFERENCES "Sub Contract VO" ("VO ref") ON DELETE CASCADE ON UPDATE CASCADE,
+    "Contra Charge ref" TEXT REFERENCES "Contra Charge" ("CC No") ON DELETE CASCADE ON UPDATE CASCADE,
+    "DOC Ref" TEXT REFERENCES "Document Manager" (File) ON DELETE CASCADE ON UPDATE CASCADE,
+    "Description" TEXT,
+    "Applied Amount" REAL,
+    "Certified Amount" REAL,
+    "Paid Amount" REAL,
+    "Remark" TEXT,
+    PRIMARY KEY ("Sub Contract No", "IP", "Item"),
+    FOREIGN KEY ("Sub Contract No", "IP") REFERENCES "Sub Contract IP Application" ("Sub Contract No", "IP") ON DELETE CASCADE
+);
+
+
 -- "VO Item" definition
 
 CREATE TABLE "VO Item" (ID INTEGER PRIMARY KEY AUTOINCREMENT, "VO ref" TEXT REFERENCES "Main Contract VO" ("VO ref") ON DELETE CASCADE ON UPDATE CASCADE, Item TEXT, Description TEXT, Qty TEXT, Unit TEXT REFERENCES "Unit Table" (Unit) ON DELETE CASCADE ON UPDATE CASCADE, Rate REAL, Discount REAL DEFAULT (0), Amount REAL GENERATED ALWAYS AS (Qty * Rate * (1 - Discount)) STORED, Trade TEXT REFERENCES "Trade Budget" (Trade) ON DELETE CASCADE ON UPDATE CASCADE, Remark TEXT, "Star Rate" BOOLEAN, "BQ ref" TEXT REFERENCES "Main Contract BQ" ON DELETE CASCADE ON UPDATE CASCADE, Agree BOOLEAN);

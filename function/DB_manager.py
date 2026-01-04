@@ -112,18 +112,22 @@ class DB_Manager:
             return
 
         with open(schema_file_path, 'r') as f:
-            schema_sql = f.read()
+            schema_content = f.read()
         
-        # Split the schema into individual statements and execute them one by one
-        # This allows for better error handling and retry logic
-        statements = [stmt.strip() for stmt in schema_sql.split(';') if stmt.strip() and not stmt.strip().startswith('--')]
+        # Remove comments (lines starting with --)
+        lines = schema_content.split('\n')
+        clean_lines = []
+        for line in lines:
+            stripped = line.strip()
+            if not stripped.startswith('--') and stripped:
+                clean_lines.append(line)
+        
+        # Join back and split on semicolons
+        clean_sql = '\n'.join(clean_lines)
+        statements = [stmt.strip() for stmt in clean_sql.split(';') if stmt.strip()]
         
         for stmt in statements:
             if stmt:
-                # Skip comments
-                if stmt.startswith('--'):
-                    continue
-                    
                 max_retries = 5  # More retries for schema creation
                 for attempt in range(max_retries):
                     try:
