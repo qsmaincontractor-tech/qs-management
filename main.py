@@ -181,6 +181,11 @@ class MainWindow(QMainWindow):
         refresh_action.setShortcut("F5")
         refresh_action.setStatusTip("Refresh all data from database")
         refresh_action.triggered.connect(self.refresh_all_data)
+        
+        # Create new database action
+        create_db_action = view_menu.addAction("Create New Database")
+        create_db_action.setStatusTip("Create a new database from schema file")
+        create_db_action.triggered.connect(self.create_new_database)
 
     def refresh_all_data(self):
         """Refresh all data across all tabs"""
@@ -220,6 +225,38 @@ class MainWindow(QMainWindow):
             
         except Exception as e:
             QMessageBox.warning(self, "Refresh Error", f"Error refreshing data: {str(e)}")
+
+    def create_new_database(self):
+        """Create a new database from the schema file"""
+        reply = QMessageBox.question(
+            self, 
+            "Create New Database",
+            "This will create a new database from the schema file. All existing data will be lost. Continue?",
+            QMessageBox.Yes | QMessageBox.No,
+            QMessageBox.No
+        )
+        
+        if reply == QMessageBox.Yes:
+            try:
+                # Close current connection
+                if hasattr(self, 'db_manager'):
+                    self.db_manager.close()
+                
+                # Delete existing database file
+                db_path = os.path.join(ROOT_PATH, "database", "QS_Project.db")
+                if os.path.exists(db_path):
+                    os.remove(db_path)
+                
+                # Create new database manager and schema
+                self.db_manager = DB_Manager(db_path)
+                schema_path = os.path.join(ROOT_PATH, "database", "Project_db_Schema.txt")
+                self.db_manager.create_tables_from_schema(schema_path)
+                
+                # Refresh all data after creating new database
+                self.refresh_all_data()
+                QMessageBox.information(self, "Success", "New database created successfully from schema.")
+            except Exception as e:
+                QMessageBox.critical(self, "Error", f"Failed to create database: {str(e)}")
 
     def closeEvent(self, event):
         self.db_manager.close()

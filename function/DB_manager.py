@@ -1,5 +1,6 @@
 import sqlite3
 import os
+import time
 
 class DB_Manager:
     def __init__(self, db_path):
@@ -10,26 +11,52 @@ class DB_Manager:
 
     def connect(self):
         try:
-            self.conn = sqlite3.connect(self.db_path)
+            # Simple connection without WAL mode for now
+            self.conn = sqlite3.connect(self.db_path, timeout=30.0)
             self.conn.row_factory = sqlite3.Row  # Access columns by name
             self.cursor = self.conn.cursor()
             print(f"Connected to database: {self.db_path}")
         except sqlite3.Error as e:
             print(f"Error connecting to database: {e}")
+            self.conn = None
+            self.cursor = None
 
     def close(self):
         if self.conn:
-            self.conn.close()
-            print("Database connection closed.")
+            try:
+                self.conn.commit()  # Ensure any pending transactions are committed
+                self.conn.close()
+                print("Database connection closed.")
+            except sqlite3.Error as e:
+                print(f"Error closing database: {e}")
 
-    def execute_query(self, query, params=()):
-        try:
-            self.cursor.execute(query, params)
-            self.conn.commit()
-            return self.cursor
-        except sqlite3.Error as e:
-            print(f"Error executing query: {query}\nParams: {params}\nError: {e}")
+    def execute_query(self, query, params=(), max_retries=3):
+        """Execute query with retry logic for database locks"""
+        if not self.conn or not self.cursor:
+            print("Database connection not available")
             return None
+            
+        for attempt in range(max_retries):
+            try:
+                self.cursor.execute(query, params)
+                self.conn.commit()
+                return self.cursor
+            except sqlite3.OperationalError as e:
+                if "database is locked" in str(e).lower():
+                    if attempt < max_retries - 1:
+                        print(f"Database locked, retrying in {0.5 * (attempt + 1)} seconds... (attempt {attempt + 1}/{max_retries})")
+                        time.sleep(0.5 * (attempt + 1))  # Exponential backoff
+                        continue
+                    else:
+                        print(f"Error executing query after {max_retries} attempts: {query}\nParams: {params}\nError: {e}")
+                        return None
+                else:
+                    print(f"Error executing query: {query}\nParams: {params}\nError: {e}")
+                    return None
+            except sqlite3.Error as e:
+                print(f"Error executing query: {query}\nParams: {params}\nError: {e}")
+                return None
+        return None
 
     def fetch_all(self, query, params=()):
         cursor = self.execute_query(query, params)
@@ -48,11 +75,17 @@ class DB_Manager:
         """
         Insert a dictionary of data into a table.
         """
+        if not self.conn or not self.cursor:
+            print("Database connection not available")
+            return None
+            
         columns = ', '.join([f'"{key}"' for key in data.keys()])
         placeholders = ', '.join(['?'] * len(data))
         query = f"INSERT INTO \"{table}\" ({columns}) VALUES ({placeholders})"
-        self.execute_query(query, tuple(data.values()))
-        return self.cursor.lastrowid
+        result = self.execute_query(query, tuple(data.values()))
+        if result:
+            return self.cursor.lastrowid
+        return None
 
     def update(self, table, data, where_clause, where_params):
         """
@@ -81,9 +114,40 @@ class DB_Manager:
         with open(schema_file_path, 'r') as f:
             schema_sql = f.read()
         
-        try:
-            self.cursor.executescript(schema_sql)
-            self.conn.commit()
-            print("Tables created successfully from schema.")
-        except sqlite3.Error as e:
-            print(f"Error creating tables: {e}")
+        # Split the schema into individual statements and execute them one by one
+        # This allows for better error handling and retry logic
+        statements = [stmt.strip() for stmt in schema_sql.split(';') if stmt.strip() and not stmt.strip().startswith('--')]
+        
+        for stmt in statements:
+            if stmt:
+                # Skip comments
+                if stmt.startswith('--'):
+                    continue
+                    
+                max_retries = 5  # More retries for schema creation
+                for attempt in range(max_retries):
+                    try:
+                        self.cursor.execute(stmt)
+                        self.conn.commit()
+                        break
+                    except sqlite3.OperationalError as e:
+                        if "database is locked" in str(e).lower():
+                            if attempt < max_retries - 1:
+                                print(f"Database locked during schema creation, retrying in {1.0 * (attempt + 1)} seconds... (attempt {attempt + 1}/{max_retries})")
+                                time.sleep(1.0 * (attempt + 1))
+                                continue
+                            else:
+                                print(f"Failed to execute schema statement after {max_retries} attempts: {stmt[:100]}...\nError: {e}")
+                                return
+                        elif "already exists" in str(e).lower():
+                            # Table already exists, skip
+                            print(f"Table already exists, skipping: {stmt[:50]}...")
+                            break
+                        else:
+                            print(f"Error executing schema statement: {stmt[:100]}...\nError: {e}")
+                            return
+                    except sqlite3.Error as e:
+                        print(f"Error executing schema statement: {stmt[:100]}...\nError: {e}")
+                        return
+        
+        print("Tables created successfully from schema.")
