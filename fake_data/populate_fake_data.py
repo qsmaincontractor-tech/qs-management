@@ -1,14 +1,19 @@
 import sys
 import os
-sys.path.append(os.path.dirname(__file__))
+# Add parent directory to path for imports
+sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 
 from function.DB_manager import DB_Manager
 
 def populate_fake_data():
-    root_path = os.path.dirname(os.path.abspath(__file__))
-    db_path = os.path.join(root_path, "database", "QS_Project.db")
+    # Use correct paths relative to the project root
+    project_root = os.path.dirname(os.path.dirname(__file__))
+    db_path = os.path.join(project_root, "database", "QS_Project.db")
+    schema_path = os.path.join(project_root, "database", "Project_db_Schema.txt")
+    
     db = DB_Manager(db_path)
-    db.create_tables_from_schema(os.path.join(root_path, "database", "Project_db_Schema.txt"))
+    # Don't recreate schema since tables already exist
+    # db.create_tables_from_schema(schema_path)
 
     # Insert Contract Types
     db.insert("Contract Type", {"Contract Type": "Remeasurement"})
@@ -54,9 +59,29 @@ def populate_fake_data():
     db.insert("Sub Contract Person", {"Sub Contract": "SC001", "Name": "John Doe", "Position": "Manager", "Tel": "12345678", "Fax": "87654321", "Email": "john@abc.com"})
     db.insert("Sub Contract Person", {"Sub Contract": "SC002", "Name": "Jane Smith", "Position": "Engineer", "Tel": "87654321", "Fax": "12345678", "Email": "jane@steel.com"})
 
-    # Insert Documents
-    db.insert("Document Manager", {"File": "DOC001", "Date": "2023-01-01", "Type": "Site Memo", "Title": "Site Meeting Notes", "From": "PM", "To": "Contractor", "Cost Implication": False, "Time Implication": True, "Remark": "Discuss schedule"})
-    db.insert("Document Manager", {"File": "DOC002", "Date": "2023-02-01", "Type": "AI", "Title": "Change in Design", "From": "Architect", "To": "Contractor", "Cost Implication": True, "Time Implication": True, "Remark": "Additional works required"})
+    # Insert Documents (check for duplicates)
+    try:
+        db.insert("Document Manager", {"File": "DOC001", "Date": "2023-01-01", "Type": "Site Memo", "Title": "Site Meeting Notes", "From": "PM", "To": "Contractor", "Cost Implication": False, "Time Implication": True, "Remark": "Discuss schedule"})
+    except:
+        pass  # Document already exists
+    try:
+        db.insert("Document Manager", {"File": "DOC002", "Date": "2023-02-01", "Type": "AI", "Title": "Change in Design", "From": "Architect", "To": "Contractor", "Cost Implication": True, "Time Implication": True, "Remark": "Additional works required"})
+    except:
+        pass  # Document already exists
+    
+    # Add more documents
+    try:
+        db.insert("Document Manager", {"File": "DOC003", "Date": "2023-03-01", "Type": "RFI", "Title": "Material Specification", "From": "Contractor", "To": "Architect", "Cost Implication": False, "Time Implication": False, "Remark": "Clarification needed"})
+    except:
+        pass
+    try:
+        db.insert("Document Manager", {"File": "DOC004", "Date": "2023-04-01", "Type": "CVI", "Title": "Variation Order Request", "From": "Contractor", "To": "PM", "Cost Implication": True, "Time Implication": True, "Remark": "Time extension required"})
+    except:
+        pass
+    try:
+        db.insert("Document Manager", {"File": "DOC005", "Date": "2023-05-01", "Type": "Shop Drawing", "Title": "Structural Drawings", "From": "Engineer", "To": "Contractor", "Cost Implication": False, "Time Implication": False, "Remark": "For approval"})
+    except:
+        pass
 
     # Insert more Abortive Work Records
     db.insert("Abortive Work Record", {"Abortive Ref": "AW005", "Date": "2023-07-01", "Issue Date": "2023-07-15", "Project Coordinator": "Coordinator E", "Cost Implication": True, "Time Implication": False, "Inspection Date": True, "Endorsement": True, "Description": "Equipment failure"})
@@ -75,9 +100,13 @@ def populate_fake_data():
     db.insert("VO Item", {"VO ref": "VO001", "Item": "VO Item 1", "Description": "Extra concrete", "Qty": "10", "Unit": "m3", "Rate": 450.0, "Trade": "Concrete", "Star Rate": False, "BQ ref": "BQ001", "Agree": True})
     db.insert("VO Item", {"VO ref": "VO002", "Item": "VO Item 2", "Description": "Additional steel", "Qty": "5", "Unit": "kg", "Rate": 1900.0, "Trade": "Steel", "Star Rate": False, "BQ ref": "BQ002", "Agree": True})
 
-    # Insert Main Contract IP
-    db.insert("Main Contract IP", {"IP": 1, "Item": 1, "Date": "2023-07-01", "Type": "Approved", "BQ ref": "BQ001", "Vo ref": "VO001", "Applied Amount": 20000.0, "Certified Amount": 19500.0, "Remark": 0})
-    db.insert("Main Contract IP", {"IP": 1, "Item": 2, "Date": "2023-07-01", "Type": "Approved", "BQ ref": "BQ002", "Vo ref": "VO002", "Applied Amount": 36000.0, "Certified Amount": 35000.0, "Remark": 0})
+    # Insert Main Contract IP Applications
+    db.insert("Main Contract IP Application", {"IP": 1, "Draft Date": "2023-06-15", "Issue Date": "2023-07-01", "Approved Date": "2023-07-10", "Payment Date": "2023-07-20", "Accumulated Applied Amount": 56000.0, "Previous Applied Amount": 0.0, "This Applied Amount": 56000.0, "Certified Amount": 54500.0, "Paid Amount": 54500.0, "Remark": "First payment"})
+    db.insert("Main Contract IP Application", {"IP": 2, "Draft Date": "2023-07-15", "Issue Date": "2023-08-01", "Approved Date": "2023-08-10", "Payment Date": "2023-08-20", "Accumulated Applied Amount": 96000.0, "Previous Applied Amount": 56000.0, "This Applied Amount": 40000.0, "Certified Amount": 39000.0, "Paid Amount": 39000.0, "Remark": "Second payment"})
+
+    # Insert Main Contract IP Items (fix table name)
+    db.insert("Main Contract IP Item", {"IP": 1, "Item": 1, "Type": "Approved", "BQ Ref": "BQ001", "VO Ref": "VO001", "DOC Ref": "DOC001", "Description": "Concrete foundation work", "Applied Amount": 20000.0, "Certified Amount": 19500.0, "Paid Amount": 19500.0, "Remark": "Completed"})
+    db.insert("Main Contract IP Item", {"IP": 1, "Item": 2, "Type": "Approved", "BQ Ref": "BQ002", "VO Ref": "VO002", "DOC Ref": "DOC002", "Description": "Steel reinforcement", "Applied Amount": 36000.0, "Certified Amount": 35000.0, "Paid Amount": 35000.0, "Remark": "Completed"})
 
     # Insert Sub Contract VO
     db.insert("Sub Contract VO", {"VO ref": "SCVO001", "Subcontract": "SC001", "Date": "2023-08-01", "Receive Date": "2023-08-05", "Description": "Extra concrete for sub", "Application Amount": 5000.0, "Agree Amount": 4800.0, "Issue Assessment": True, "Dispute": False, "Agree": True, "Reject": False, "Remark": "Approved"})
@@ -89,8 +118,11 @@ def populate_fake_data():
     # Insert SC VO Item
     db.insert("SC VO Item", {"VO ref": "SCVO001", "Item": "SC VO Item 1", "Description": "Extra sub concrete", "Qty": "5", "Unit": "m3", "Rate": 430.0, "Trade": "Concrete", "Star Rate": False, "BQ ref": "Concrete Pouring", "Agree": True})
 
-    # Insert Sub Contract IP
-    db.insert("Sub Contract IP", {"IP": 1, "Item": 1, "Date": "2023-09-01", "Type": "Approved", "Contract Work ref": "Concrete Pouring", "VO ref": "SCVO001", "Applied Amount": 12600.0, "Certified Amount": 12000.0, "Remark": 0})
+    # Insert Sub Contract IP Applications
+    db.insert("Sub Contract IP Application", {"Sub Contract No": "SC001", "IP": 1, "Draft Date": "2023-08-15", "Issue Date": "2023-09-01", "Approved Date": "2023-09-10", "Payment Date": "2023-09-20", "Accumulated Applied Amount": 12600.0, "Previous Applied Amount": 0.0, "This Applied Amount": 12600.0, "Certified Amount": 12000.0, "Paid Amount": 12000.0, "Remark": "Sub contract payment"})
+    
+    # Insert Sub Contract IP Items
+    db.insert("Sub Contract IP Item", {"Sub Contract No": "SC001", "IP": 1, "Item": 1, "Type": "Approved", "Contract Work ref": "Concrete Pouring", "VO ref": "SCVO001", "DOC Ref": "DOC001", "Description": "Sub concrete work", "Applied Amount": 12600.0, "Certified Amount": 12000.0, "Paid Amount": 12000.0, "Remark": "Completed"})
 
     # Insert Contra Charge
     db.insert("Contra Charge", {"CC No": "CC001", "Date": "2023-10-01", "Title": "Delay Penalty", "Reason": "Late delivery", "Agree Amount": 1000.0, "Deduct To": "SC001"})
