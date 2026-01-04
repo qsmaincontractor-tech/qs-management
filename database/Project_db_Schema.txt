@@ -1,0 +1,194 @@
+-- "Abortive Work Record" definition
+
+CREATE TABLE "Abortive Work Record" ("Abortive Ref" TEXT PRIMARY KEY, Date DATE, "Issue Date" DATE, "Project Coordinator" TEXT, "Cost Implication" BOOLEAN, "Time Implication" BOOLEAN, "Inspection Date" DATE, Endorsement BOOLEAN, Description TEXT);
+
+
+-- "Contract Type" definition
+
+CREATE TABLE "Contract Type" ("Contract Type" TEXT PRIMARY KEY UNIQUE);
+
+
+-- "Document Type" definition
+
+CREATE TABLE "Document Type" (Type, Description);
+
+
+-- "Main Contract IP Application" definition
+
+CREATE TABLE "Main Contract IP Application" (
+    "IP" INTEGER PRIMARY KEY,
+    "Draft Date" DATE,
+    "Issue Date" DATE,
+    "Approved Date" DATE,
+    "Payment Date" DATE,
+    "Accumulated Applied Amount" REAL,
+    "Previous Applied Amount" REAL,
+    "This Applied Amount" REAL,
+    "Certified Amount" REAL,
+    "Paid Amount" REAL,
+    "Remark" TEXT
+);
+
+
+-- "Main Contract VO" definition
+
+CREATE TABLE "Main Contract VO" ("VO ref" TEXT PRIMARY KEY, Date DATE, "Issue Date" DATE, Description TEXT, "Application Amount" REAL, "Agree Amount" REAL, "Receive Assessment" BOOLEAN, Dispute BOOLEAN, Agree BOOLEAN, Reject BOOLEAN, Remark TEXT);
+
+
+-- "MC IP Type" definition
+
+CREATE TABLE "MC IP Type" (Type TEXT PRIMARY KEY, remark TEXT);
+
+
+-- "SC IP Type" definition
+
+CREATE TABLE "SC IP Type" (Type TEXT PRIMARY KEY, remark TEXT);
+
+
+-- "Unit Table" definition
+
+CREATE TABLE "Unit Table" ("Order" INTEGER, Unit TEXT PRIMARY KEY UNIQUE, Description TEXT);
+
+
+-- "Document Manager" definition
+
+CREATE TABLE "Document Manager" (File TEXT PRIMARY KEY, Date DATE, Type TEXT REFERENCES "Document Type" (Type) ON DELETE CASCADE ON UPDATE CASCADE, Title TEXT, "From" TEXT, "To" TEXT, "Cost Implication" BOOLEAN, "Time Implication" BOOLEAN, Remark TEXT);
+
+
+-- "Main Contract IP Item" definition
+
+CREATE TABLE "Main Contract IP Item" (
+    "IP" INTEGER,
+    "Item" INTEGER,
+    "Type" TEXT REFERENCES "MC IP Type" (Type) ON DELETE CASCADE ON UPDATE CASCADE,
+    "BQ Ref" TEXT REFERENCES "Main Contract BQ" ("BQ ID") ON DELETE CASCADE ON UPDATE CASCADE,
+    "VO Ref" TEXT REFERENCES "Main Contract VO" ("VO ref") ON DELETE CASCADE ON UPDATE CASCADE,
+    "DOC Ref" TEXT REFERENCES "Document Manager" (File) ON DELETE CASCADE ON UPDATE CASCADE,
+    "Description" TEXT,
+    "Applied Amount" REAL,
+    "Certified Amount" REAL,
+    "Paid Amount" REAL,
+    "Remark" TEXT,
+    PRIMARY KEY ("IP", "Item"),
+    FOREIGN KEY ("IP") REFERENCES "Main Contract IP Application" ("IP") ON DELETE CASCADE
+);
+
+
+-- "Sub Contract" definition
+
+CREATE TABLE "Sub Contract" ("Sub Contract No" TEXT PRIMARY KEY UNIQUE NOT NULL, "Sub Contract Name" TEXT, "Company Name" TEXT, "Contract Type" TEXT REFERENCES "Contract Type" ("Contract Type") ON DELETE CASCADE ON UPDATE CASCADE, "Contract Sum" REAL, "Final Account Amount" REAL);
+
+
+-- "Sub Contract Person" definition
+
+CREATE TABLE "Sub Contract Person" (ID INTEGER PRIMARY KEY AUTOINCREMENT, "Sub Contract" REFERENCES "Sub Contract" ("Sub Contract No") ON DELETE CASCADE ON UPDATE CASCADE, Name TEXT, Position TEXT, Tel TEXT, Fax TEXT, Email TEXT);
+
+
+-- "Sub Contract VO" definition
+
+CREATE TABLE "Sub Contract VO" ("VO ref" TEXT PRIMARY KEY, Subcontract TEXT REFERENCES "Sub Contract" ("Sub Contract No") ON DELETE CASCADE ON UPDATE CASCADE, Date DATE, "Receive Date" DATE, Description TEXT, "Application Amount" REAL, "Agree Amount" REAL, "Issue Assessment" BOOLEAN, Dispute BOOLEAN, Agree BOOLEAN, Reject BOOLEAN, Remark TEXT);
+
+
+-- "Trade Budget" definition
+
+CREATE TABLE "Trade Budget" (Trade TEXT PRIMARY KEY, Description TEXT, Qty REAL, Unit TEXT REFERENCES "Unit Table" (Unit) ON DELETE CASCADE ON UPDATE CASCADE, Rate REAL, "Discount Factor" REAL, "Budget Amount" REAL GENERATED ALWAYS AS (Qty * Rate * (1 - "Discount Factor")) STORED);
+
+
+-- "VO Abortive Record" definition
+
+CREATE TABLE "VO Abortive Record" ("VO ref" TEXT REFERENCES "Main Contract VO" ("VO ref") ON DELETE CASCADE ON UPDATE CASCADE, "Abortive Work ref" TEXT REFERENCES "Abortive Work Record" ("Abortive Ref") ON DELETE CASCADE ON UPDATE CASCADE, Remark TEXT, PRIMARY KEY ("VO ref", "Abortive Work ref"));
+
+
+-- "VO Document" definition
+
+CREATE TABLE "VO Document" ("VO Ref" TEXT REFERENCES "Main Contract VO" ("VO ref") ON DELETE CASCADE ON UPDATE CASCADE, "Doc Ref" TEXT REFERENCES "Document Manager" (File) ON DELETE CASCADE ON UPDATE CASCADE, Remark TEXT, PRIMARY KEY ("VO Ref", "Doc Ref"));
+
+
+-- "Contra Charge Document" definition
+
+CREATE TABLE "Contra Charge Document" ("CC No" TEXT REFERENCES "Contra Charge" ("CC No") ON DELETE CASCADE ON UPDATE CASCADE, "Doc Ref" TEXT REFERENCES "Document Manager" (File) ON DELETE CASCADE ON UPDATE CASCADE, Remark TEXT, PRIMARY KEY ("CC No", "Doc Ref"));
+
+
+-- "Abortive Work_Document" definition
+
+CREATE TABLE "Abortive Work_Document" ("Abortive Ref" TEXT REFERENCES "Abortive Work Record" ("Abortive Ref") ON DELETE CASCADE ON UPDATE CASCADE, "Doc Ref" TEXT REFERENCES "Document Manager" (File) ON DELETE CASCADE ON UPDATE CASCADE, Remark TEXT, PRIMARY KEY ("Abortive Ref", "Doc Ref"));
+
+
+-- "Contra Charge" definition
+
+CREATE TABLE "Contra Charge" ("CC No" TEXT PRIMARY KEY, Date DATE, Title TEXT, Reason TEXT, "Agree Amount" REAL, "Deduct To" TEXT REFERENCES "Sub Contract" ("Sub Contract No") ON DELETE CASCADE ON UPDATE CASCADE);
+
+
+-- "Contra Charge Item" definition
+
+CREATE TABLE "Contra Charge Item" ("Item ID" INTEGER PRIMARY KEY ASC AUTOINCREMENT, "CC No" INTEGER REFERENCES "Contra Charge" ("CC No") ON DELETE CASCADE ON UPDATE CASCADE, Description item, Qty REAL, Unit TEXT REFERENCES "Unit Table" (Unit) ON DELETE CASCADE ON UPDATE CASCADE, Rate REAL, "Admin Rate" REAL DEFAULT (0.15), "Admin Charge" REAL GENERATED ALWAYS AS (Qty * Rate * "Admin Rate") STORED, "Total Amount" REAL GENERATED ALWAYS AS (Qty * Rate + "Admin Charge") STORED, "Give to" TEXT REFERENCES "Sub Con Works" ON DELETE CASCADE ON UPDATE CASCADE);
+
+
+-- "Document Cover" definition
+
+CREATE TABLE "Document Cover" ("Parent Doc" TEXT REFERENCES "Document Manager" (File) ON DELETE CASCADE ON UPDATE CASCADE, "Child Document" TEXT REFERENCES "Document Manager" (File) ON DELETE CASCADE ON UPDATE CASCADE, PRIMARY KEY ("Parent Doc", "Child Document"));
+
+
+-- "Main Contract BQ" definition
+
+CREATE TABLE "Main Contract BQ" ("BQ ID" TEXT PRIMARY KEY UNIQUE, Bill TEXT, Section TEXT, Page TEXT, Item TEXT, description TEXT, Qty REAL, Unit TEXT REFERENCES "Unit Table" (Unit) ON DELETE CASCADE ON UPDATE CASCADE, Rate REAL, Discount REAL DEFAULT (0), Amount REAL GENERATED ALWAYS AS (Qty * Rate * (1 - Discount)) STORED, Trade TEXT REFERENCES "Trade Budget" (Trade) ON DELETE CASCADE ON UPDATE CASCADE, Remark TEXT);
+
+
+
+
+-- "SC VO Document" definition
+
+CREATE TABLE "SC VO Document" ("VO Ref" TEXT REFERENCES "Sub Contract VO" ("VO ref") ON DELETE CASCADE ON UPDATE CASCADE, "Doc Ref" TEXT REFERENCES "Document Manager" (File) ON DELETE CASCADE ON UPDATE CASCADE, Remark TEXT, PRIMARY KEY ("VO Ref", "Doc Ref"));
+
+
+-- "SC VO Item" definition
+
+CREATE TABLE "SC VO Item" (ID INTEGER PRIMARY KEY AUTOINCREMENT, "VO ref" TEXT REFERENCES "Sub Contract VO" ("VO ref") ON DELETE CASCADE ON UPDATE CASCADE, Item TEXT, Description TEXT, Qty TEXT, Unit TEXT REFERENCES "Unit Table" (Unit) ON DELETE CASCADE ON UPDATE CASCADE, Rate REAL, Discount REAL DEFAULT (0), Amount REAL GENERATED ALWAYS AS (Qty * Rate * (1 - Discount)) STORED, Trade TEXT REFERENCES "Trade Budget" (Trade) ON DELETE CASCADE ON UPDATE CASCADE, Remark TEXT, "Star Rate" BOOLEAN, "BQ ref" TEXT REFERENCES "Sub Con Works" ON DELETE CASCADE ON UPDATE CASCADE, Agree BOOLEAN);
+
+
+-- "Sub Con Works" definition
+
+CREATE TABLE "Sub Con Works" (Subcontract TEXT REFERENCES "Sub Contract" ("Sub Contract No") ON DELETE CASCADE ON UPDATE CASCADE, Works TEXT, Qty REAL, Unit TEXT REFERENCES "Unit Table" (Unit) ON DELETE CASCADE ON UPDATE CASCADE, Rate REAL, Discount REAL, Amount REAL GENERATED ALWAYS AS (Qty * Rate * (1 - Discount)) STORED, "Budget Amount" REAL, Trade REFERENCES "Trade Budget" (Trade) ON DELETE CASCADE ON UPDATE CASCADE, PRIMARY KEY (Subcontract ASC, Works));
+
+
+-- "Sub Contract IP" definition
+
+CREATE TABLE "Sub Contract IP" (IP INTEGER, Item INTEGER, Date DATE, Type TEXT REFERENCES "SC IP Type" (Type) ON DELETE CASCADE ON UPDATE CASCADE, "Contract Work ref" TEXT REFERENCES "Sub Con Works" ON DELETE CASCADE ON UPDATE CASCADE, "VO ref" TEXT REFERENCES "Sub Contract VO" ("VO ref") ON DELETE CASCADE ON UPDATE CASCADE, "Contra Charge ref" TEXT REFERENCES "Contra Charge" ("CC No"), "Applied Amount" REAL, "Certified Amount" REAL, Remark REAL, PRIMARY KEY (IP, Item));
+
+
+-- "VO Item" definition
+
+CREATE TABLE "VO Item" (ID INTEGER PRIMARY KEY AUTOINCREMENT, "VO ref" TEXT REFERENCES "Main Contract VO" ("VO ref") ON DELETE CASCADE ON UPDATE CASCADE, Item TEXT, Description TEXT, Qty TEXT, Unit TEXT REFERENCES "Unit Table" (Unit) ON DELETE CASCADE ON UPDATE CASCADE, Rate REAL, Discount REAL DEFAULT (0), Amount REAL GENERATED ALWAYS AS (Qty * Rate * (1 - Discount)) STORED, Trade TEXT REFERENCES "Trade Budget" (Trade) ON DELETE CASCADE ON UPDATE CASCADE, Remark TEXT, "Star Rate" BOOLEAN, "BQ ref" TEXT REFERENCES "Main Contract BQ" ON DELETE CASCADE ON UPDATE CASCADE, Agree BOOLEAN);
+
+
+-- Subcontract Link Tables (added by migration)
+
+CREATE TABLE IF NOT EXISTS "SC Person Links" (
+    "Sub Contract" TEXT REFERENCES "Sub Contract" ("Sub Contract No") ON DELETE CASCADE,
+    "Person ID" INTEGER,
+    "Remark" TEXT,
+    PRIMARY KEY ("Sub Contract", "Person ID"),
+    FOREIGN KEY ("Person ID") REFERENCES "Sub Contract Person" (ID) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS "SC Works Links" (
+    "Sub Contract" TEXT REFERENCES "Sub Contract" ("Sub Contract No") ON DELETE CASCADE,
+    "Works Ref" TEXT,
+    "Remark" TEXT,
+    PRIMARY KEY ("Sub Contract", "Works Ref")
+);
+
+CREATE TABLE IF NOT EXISTS "SC VO Links" (
+    "Sub Contract" TEXT REFERENCES "Sub Contract" ("Sub Contract No") ON DELETE CASCADE,
+    "VO ref" TEXT,
+    "Remark" TEXT,
+    PRIMARY KEY ("Sub Contract", "VO ref"),
+    FOREIGN KEY ("VO ref") REFERENCES "Sub Contract VO" ("VO ref") ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS "SC Payment Links" (
+    "Sub Contract" TEXT REFERENCES "Sub Contract" ("Sub Contract No") ON DELETE CASCADE,
+    "IP" INTEGER,
+    "Remark" TEXT,
+    PRIMARY KEY ("Sub Contract", "IP")
+);

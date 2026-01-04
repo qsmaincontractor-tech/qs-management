@@ -1,0 +1,72 @@
+Create a QS Manager Application:
+
+-- the database structure
+using Project_db_Schema.txt structure
+
+-- Technical Stack
+- using SQLite3 for database operation
+- using pyQT5 for Ui creation
+- using openpyxl for batch reading xlxs files
+- using win32 to write the files using template xlxs files
+
+-- main function
+- the main function will be stored in "04 QS Management" Root Folder
+- all Ui should be stored in "Ui" folder
+
+-- functions
+- all particular functions stored in a separate .py stored in "function" folder
+- main table: the record mainly rely on
+- intermediate table: communicate to other manager
+
+1) DB_manager.py
+DB_manager will create a class to manage CURD operation including where and sorting function as optional choice
+
+2) Doc_manager.py
+Doc_manager will create a class to manage all document of Site
+the document will be a evidence to support Abortive work and VO Management
+it get support from the table in database below:
+- Document Manager (Main Table)
+- Abortive Work Document (intermediate table)
+- VO Document (intermediate table)
+- SC VO Document (intermediate table)
+- Document Cover (establish the hierarchy relationship among documents)
+- Document Type (to confine the type of document to enchance the consistenancy and classification, the type basically including Site Memo, AI , RFI, CVI, Shop Drawing, Claims, NOD, NOE)
+
+3) Abortive_manager.py
+the Abortive_manager will create a class to manage all Abortive Works Record
+when abortive work record will be in connection with the supporting document and to be a base to VO Application
+it get support from the table in database below:
+- Abortive Work Record (Main Table)
+- Abortive Work Document (intermediate table)
+- VO Abortive Record (intermediate table)
+
+4) Payment_Application_manager.py
+the Payment_Application_manager will create a class to create a payment application to client. The payment application has a period, and every application will become a record to table. The payment having 2 components: 1) BQ, 2) Variation Order (VO)
+BQ is the contract work, a works defined in the Contract, and the VO is the change of the contract, it can come from abortive works or other architectural instruction or other claims
+it get support from the table in database below:
+- Main Contract IP (Main Table)
+- MC IP Type (to confine the status of IP, can be switch in the progress, mainly including Budgetive, Pending, Approved)
+- Main Contract BQ (Sub Table: to record payment from Contract BQ)
+- Main Contract VO (Sub Table: to record payment from VO)
+- VO Item (Sub-sub Table: to record the breakdown of a VO)
+
+5) Subcontract_manager.py
+the Subcontract_manager will create a class to manage the subcontract, including its i) basic information and ii) its payment application
+it get support from the table in database below:
+i - basic information
+- Sub Contract (Main Table: to record the basic information of subcontract)
+- Sub Contract Person (Central Contact: to manage the subcontractor information in single place, for easy modification)
+- Sub Contact Type (The contract Type: Remeasurement, Lump Sum, SoR)
+ii - Payment Application
+- Sub Contract IP (Main Table: to record the every application from subcontract)
+- SC IP Type (Status of SC IP)
+- Sub Con Works (the breakdown of Sub Contract IP works)
+- Sub Contract VO (the breakdown of Sub Contract IP works)
+- SC VO Item (the breakdown of Sub Contract VO)
+
+6) Budget_manager.py
+the Budget_manager will create a class to manage the Profit and Loss of the Project.
+i) it create a Trade of Works. In the specific trade, it can consist the expected budget to complete the trade of works, such as supply of concrete, concreting...etc.
+ii) to sum the income from Main Contract BQ and VO Item
+iii) to sum the expense from SC Works and its VO Item
+iv) from the infromation above, it can calculate the short of revenue from the budget, and how much can be expended further. if the revenue > budget = profit, whiile revenue < budget = loss. 

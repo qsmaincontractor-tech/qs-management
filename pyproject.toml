@@ -1,0 +1,15 @@
+[build-system]
+requires = ["setuptools>=42", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "qs-management"
+version = "0.9.0b1"
+description = "QS Management: Budgeting, Cashflow and Payment Application tools"
+authors = [ { name = "" } ]
+readme = "README.md"
+license = { text = "MIT" }
+requires-python = ">=3.10"
+
+[tool.setuptools]
+packages = ["function", "ui"]

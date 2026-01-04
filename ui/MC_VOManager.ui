@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MCVOManagerForm</class>
+ <widget class="QWidget" name="MCVOManagerForm">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>800</width>
+    <height>600</height>
+   </rect>
+  </property>
+  <layout class="QHBoxLayout" name="horizontalLayout">
+   <item>
+    <widget class="QSplitter" name="main_splitter">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <widget class="QWidget" name="left_widget">
+      <layout class="QVBoxLayout" name="verticalLayout">
+       <item>
+        <widget class="QLabel" name="label_vo_list">
+         <property name="text">
+          <string>Main Contract VOs</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QListWidget" name="vo_list"/>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="buttonLayout_left">
+         <item>
+          <widget class="QPushButton" name="btn_add">
+           <property name="text"><string>Add VO</string></property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="btn_update">
+           <property name="text"><string>Update</string></property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="btn_delete">
+           <property name="text"><string>Delete</string></property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="right_widget">
+      <layout class="QVBoxLayout" name="verticalLayout_right">
+       <item>
+        <widget class="QWidget" name="form_group">
+         <layout class="QFormLayout" name="formLayout">
+          <item row="0" column="0">
+           <widget class="QLabel" name="label_ref"><property name="text"><string>VO Ref:</string></property></widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QLineEdit" name="lineEdit_ref"/>
+          </item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="label_date"><property name="text"><string>Date:</string></property></widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QDateEdit" name="dateEdit_date"><property name="calendarPopup"><bool>true</bool></property></widget>
+          </item>
+          <item row="2" column="0">
+           <widget class="QLabel" name="label_issue"><property name="text"><string>Issue Date:</string></property></widget>
+          </item>
+          <item row="2" column="1">
+           <widget class="QDateEdit" name="dateEdit_issue"><property name="calendarPopup"><bool>true</bool></property></widget>
+          </item>
+          <item row="3" column="0">
+           <widget class="QLabel" name="label_desc"><property name="text"><string>Description:</string></property></widget>
+          </item>
+          <item row="3" column="1">
+           <widget class="QLineEdit" name="lineEdit_desc"/>
+          </item>
+          <item row="4" column="0">
+           <widget class="QLabel" name="label_app"><property name="text"><string>Application Amount:</string></property></widget>
+          </item>
+          <item row="4" column="1">
+           <widget class="QLineEdit" name="lineEdit_app"/>
+          </item>
+          <item row="5" column="0">
+           <widget class="QLabel" name="label_agree"><property name="text"><string>Agree Amount:</string></property></widget>
+          </item>
+          <item row="5" column="1">
+           <widget class="QLineEdit" name="lineEdit_agree"/>
+          </item>
+          <item row="6" column="0">
+           <widget class="QLabel" name="label_receive"><property name="text"><string>Receive Assessment:</string></property></widget>
+          </item>
+          <item row="6" column="1">
+           <widget class="QCheckBox" name="checkBox_receive"/>
+          </item>
+          <item row="7" column="0">
+           <widget class="QLabel" name="label_dispute"><property name="text"><string>Dispute:</string></property></widget>
+          </item>
+          <item row="7" column="1">
+           <widget class="QCheckBox" name="checkBox_dispute"/>
+          </item>
+          <item row="8" column="0">
+           <widget class="QLabel" name="label_agree_chk"><property name="text"><string>Agree:</string></property></widget>
+          </item>
+          <item row="8" column="1">
+           <widget class="QCheckBox" name="checkBox_agree"/>
+          </item>
+          <item row="9" column="0">
+           <widget class="QLabel" name="label_reject"><property name="text"><string>Reject:</string></property></widget>
+          </item>
+          <item row="9" column="1">
+           <widget class="QCheckBox" name="checkBox_reject"/>
+          </item>
+          <item row="10" column="0">
+           <widget class="QLabel" name="label_remark"><property name="text"><string>Remark:</string></property></widget>
+          </item>
+          <item row="10" column="1">
+           <widget class="QTextEdit" name="textEdit_remark"/>
+          </item>
+          <item row="11" column="0">
+           <widget class="QLabel" name="label_totals_applied_label"><property name="text"><string>IP Applied Total:</string></property></widget>
+          </item>
+          <item row="11" column="1">
+           <widget class="QLabel" name="label_totals_applied"/>
+          </item>
+          <item row="12" column="0">
+           <widget class="QLabel" name="label_totals_certified_label"><property name="text"><string>IP Certified Total:</string></property></widget>
+          </item>
+          <item row="12" column="1">
+           <widget class="QLabel" name="label_totals_certified"/>
+          </item>
+          <item row="13" column="0">
+           <widget class="QLabel" name="label_totals_paid_label"><property name="text"><string>IP Paid Total:</string></property></widget>
+          </item>
+          <item row="13" column="1">
+           <widget class="QLabel" name="label_totals_paid"/>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QTabWidget" name="link_tabs">
+         <widget class="QWidget" name="tab_docs">
+          <attribute name="title"><string>Documents</string></attribute>
+          <layout class="QVBoxLayout" name="verticalLayout_docs">
+           <item>
+            <widget class="QTableWidget" name="table_docs"/>
+           </item>
+           <item>
+            <layout class="QHBoxLayout" name="docs_btn_layout">
+             <item>
+              <widget class="QPushButton" name="btn_add_doc_link"><property name="text"><string>Add Document Link</string></property></widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="btn_delete_doc_link"><property name="text"><string>Delete Document Link</string></property></widget>
+             </item>
+            </layout>
+           </item>
+          </layout>
+         </widget>
+         <widget class="QWidget" name="tab_abortive">
+          <attribute name="title"><string>Abortive Works</string></attribute>
+          <layout class="QVBoxLayout" name="verticalLayout_abortive">
+           <item>
+            <widget class="QTableWidget" name="table_abortive"/>
+           </item>
+           <item>
+            <layout class="QHBoxLayout" name="abortive_btn_layout">
+             <item>
+              <widget class="QPushButton" name="btn_add_abortive_link"><property name="text"><string>Add Abortive Link</string></property></widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="btn_delete_abortive_link"><property name="text"><string>Delete Abortive Link</string></property></widget>
+             </item>
+            </layout>
+           </item>
+          </layout>
+         </widget>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

@@ -1,0 +1,6 @@
+pytest>=7.0.0
+flake8
+openpyxl>=3.1.0
+pandas
+build
+pip-audit

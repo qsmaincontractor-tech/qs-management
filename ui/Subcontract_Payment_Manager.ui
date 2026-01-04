@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>SubcontractPaymentManagerForm</class>
+ <widget class="QWidget" name="SubcontractPaymentManagerForm">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>646</width>
+    <height>721</height>
+   </rect>
+  </property>
+  <layout class="QHBoxLayout" name="mainLayout">
+   <item>
+    <widget class="QSplitter" name="main_splitter">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <widget class="QWidget" name="left_widget">
+      <property name="minimumSize">
+       <size>
+        <width>180</width>
+        <height>0</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>300</width>
+        <height>16777215</height>
+       </size>
+      </property>
+      <layout class="QVBoxLayout" name="left_vbox">
+       <item>
+        <widget class="QLabel" name="label_subcontract">
+         <property name="text">
+          <string>Select Subcontract:</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QComboBox" name="combo_subcontract"/>
+       </item>
+       <item>
+        <widget class="QLabel" name="label_ips">
+         <property name="text">
+          <string>Payment Applications</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QListWidget" name="ip_list"/>
+       </item>
+       <item>
+        <widget class="QPushButton" name="btn_add_ip">
+         <property name="text">
+          <string>New IP</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <layout class="QVBoxLayout" name="verticalLayout">
+         <item>
+          <widget class="QPushButton" name="btn_copy_ip">
+           <property name="text">
+            <string>Copy Previous IP</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="btn_delete_ip">
+           <property name="text">
+            <string>Delete IP</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="right_widget">
+      <layout class="QVBoxLayout" name="right_vbox">
+       <item>
+        <layout class="QFormLayout" name="formLayout">
+         <item row="0" column="0">
+          <widget class="QLabel" name="label_ipno">
+           <property name="text">
+            <string>IP No:</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="1">
+          <widget class="QLineEdit" name="edit_ip_no"/>
+         </item>
+         <item row="1" column="0">
+          <widget class="QLabel" name="label_draft">
+           <property name="text">
+            <string>Draft Date:</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="1">
+          <widget class="QDateEdit" name="date_draft"/>
+         </item>
+         <item row="2" column="0">
+          <widget class="QLabel" name="label_issue">
+           <property name="text">
+            <string>Issue Date:</string>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="1">
+          <widget class="QDateEdit" name="date_issue"/>
+         </item>
+         <item row="3" column="0">
+          <widget class="QLabel" name="label_approved">
+           <property name="text">
+            <string>Approved Date:</string>
+           </property>
+          </widget>
+         </item>
+         <item row="3" column="1">
+          <widget class="QDateEdit" name="date_approved">
+           <property name="calendarPopup">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item row="4" column="0">
+          <widget class="QLabel" name="label_payment">
+           <property name="text">
+            <string>Payment Date:</string>
+           </property>
+          </widget>
+         </item>
+         <item row="4" column="1">
+          <widget class="QDateEdit" name="date_payment">
+           <property name="calendarPopup">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item row="5" column="0">
+          <widget class="QLabel" name="label_acc">
+           <property name="text">
+            <string>Accumulated Applied:</string>
+           </property>
+          </widget>
+         </item>
+         <item row="5" column="1">
+          <widget class="QLineEdit" name="spin_accumulated"/>
+         </item>
+         <item row="6" column="0">
+          <widget class="QLabel" name="label_previous">
+           <property name="text">
+            <string>Previous Applied:</string>
+           </property>
+          </widget>
+         </item>
+         <item row="6" column="1">
+          <widget class="QLineEdit" name="spin_previous"/>
+         </item>
+         <item row="7" column="0">
+          <widget class="QLabel" name="label_this">
+           <property name="text">
+            <string>This Applied:</string>
+           </property>
+          </widget>
+         </item>
+         <item row="7" column="1">
+          <widget class="QLineEdit" name="spin_this"/>
+         </item>
+         <item row="8" column="0">
+          <widget class="QLabel" name="label_certified">
+           <property name="text">
+            <string>Certified Amount:</string>
+           </property>
+          </widget>
+         </item>
+         <item row="8" column="1">
+          <widget class="QLineEdit" name="spin_certified"/>
+         </item>
+         <item row="9" column="0">
+          <widget class="QLabel" name="label_paid">
+           <property name="text">
+            <string>Paid Amount:</string>
+           </property>
+          </widget>
+         </item>
+         <item row="9" column="1">
+          <widget class="QLineEdit" name="spin_paid"/>
+         </item>
+         <item row="10" column="0">
+          <widget class="QLabel" name="label_remark">
+           <property name="text">
+            <string>Remark:</string>
+           </property>
+          </widget>
+         </item>
+         <item row="10" column="1">
+          <widget class="QTextEdit" name="text_remark"/>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <widget class="QLabel" name="label_items">
+         <property name="text">
+          <string>Items Breakdown</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QTableWidget" name="item_table"/>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="item_buttons">
+         <item>
+          <widget class="QPushButton" name="btn_add_item">
+           <property name="text">
+            <string>Add Item</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="btn_delete_item">
+           <property name="text">
+            <string>Delete Item</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="btn_calc_totals">
+           <property name="text">
+            <string>Calculate Totals</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

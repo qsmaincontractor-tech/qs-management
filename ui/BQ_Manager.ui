@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>BQManagerForm</class>
+ <widget class="QWidget" name="BQManagerForm">
+  <property name="geometry"><rect><x>0</x><y>0</y><width>800</width><height>600</height></rect></property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <layout class="QHBoxLayout" name="topButtons">
+     <item><widget class="QPushButton" name="btn_import"><property name="text"><string>Import from Excel</string></property></widget></item>
+     <item><widget class="QPushButton" name="btn_export"><property name="text"><string>Export to Excel</string></property></widget></item>
+     <item><widget class="QPushButton" name="btn_add"><property name="text"><string>Add Item</string></property></widget></item>
+     <item><widget class="QPushButton" name="btn_delete"><property name="text"><string>Delete Item</string></property></widget></item>
+     <item><widget class="QPushButton" name="btn_refresh"><property name="text"><string>Refresh</string></property></widget></item>
+     <item>
+      <layout class="QHBoxLayout" name="filterLayout">
+       <item><widget class="QLabel" name="label_filter"><property name="text"><string>Filter:</string></property></widget></item>
+       <item><widget class="QComboBox" name="combo_filter_field"/></item>
+       <item><widget class="QLineEdit" name="edit_filter"/></item>
+       <item><widget class="QPushButton" name="btn_apply_filter"><property name="text"><string>Apply Filter</string></property></widget></item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="sortLayout">
+       <item><widget class="QLabel" name="label_sort"><property name="text"><string>Sort by:</string></property></widget></item>
+       <item><widget class="QComboBox" name="combo_sort_field"/></item>
+       <item><widget class="QPushButton" name="btn_sort_toggle"><property name="text"><string>Asc</string></property></widget></item>
+      </layout>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <widget class="QTableWidget" name="table"/>
+   </item>
+   <item>
+    <widget class="QLabel" name="label_total_amount"><property name="text"><string>Total Amount: 0.00</string></property></widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

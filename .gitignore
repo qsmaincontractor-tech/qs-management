@@ -1,0 +1,58 @@
+# Byte-compiled / cache
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Distribution / build
+build/
+dist/
+*.egg-info/
+*.egg
+*.whl
+
+# Virtualenv / env files
+venv/
+.env
+.env.*
+
+# Pytest / coverage
+.pytest_cache/
+.coverage
+htmlcov/
+
+# IDEs
+.vscode/
+.idea/
+
+# OS files
+Thumbs.db
+.DS_Store
+
+# Databases
+database/*.db
+database/*.sqlite
+
+# Large vendor/driver bundles (noise)
+Web/edgedriver_win32/
+Web/edgedriver_win64/
+Web/edgedriver_*/
+
+# Docs screenshots (optional to exclude from repo)
+docs/screenshots/
+
+# Secrets baseline
+.secrets.baseline
+
+# Logs
+*.log
+
+# Python packaging
+*.egg-info/
+
+# Build metadata
+qs_management.egg-info/
+
+# Exclude built binaries
+*.so
+*.dll
+*.pyd

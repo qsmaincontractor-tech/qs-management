@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>SC_VO_ManagerForm</class>
+ <widget class="QWidget" name="SC_VO_ManagerForm">
+  <layout class="QHBoxLayout" name="main_layout">
+   <item>
+    <widget class="QSplitter" name="splitter">
+     <property name="orientation"><enum>Qt::Horizontal</enum></property>
+     <widget class="QWidget" name="left_widget">
+      <layout class="QVBoxLayout" name="left_vbox">
+       <item><widget class="QLabel" name="label_title"><property name="text"><string>Sub Contract VOs</string></property></widget></item>
+       <item><widget class="QTableWidget" name="table_sc_vos"><property name="columnCount"><number>4</number></property></widget></item>
+       <item>
+        <layout class="QHBoxLayout" name="left_buttons">
+         <item><widget class="QPushButton" name="btn_add"><property name="text"><string>Add SC VO</string></property></widget></item>
+         <item><widget class="QPushButton" name="btn_update"><property name="text"><string>Update</string></property></widget></item>
+         <item><widget class="QPushButton" name="btn_delete"><property name="text"><string>Delete</string></property></widget></item>
+        </layout>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="right_widget">
+      <layout class="QVBoxLayout" name="right_vbox">
+       <item>
+        <widget class="QWidget" name="form_group">
+         <layout class="QFormLayout" name="formLayout">
+          <item row="0" column="0"><widget class="QLabel" name="label_ref"><property name="text"><string>VO Ref:</string></property></widget></item>
+          <item row="0" column="1"><widget class="QLineEdit" name="lineEdit_ref"/></item>
+          <item row="1" column="0"><widget class="QLabel" name="label_sub"><property name="text"><string>Subcontract:</string></property></widget></item>
+          <item row="1" column="1"><widget class="QComboBox" name="comboBox_subcontract"/></item>
+          <item row="2" column="0"><widget class="QLabel" name="label_date"><property name="text"><string>Date:</string></property></widget></item>
+          <item row="2" column="1"><widget class="QDateEdit" name="dateEdit_date"/></item>
+          <item row="3" column="0"><widget class="QLabel" name="label_receive"><property name="text"><string>Receive Date:</string></property></widget></item>
+          <item row="3" column="1"><widget class="QDateEdit" name="dateEdit_receive"/></item>
+          <item row="4" column="0"><widget class="QLabel" name="label_desc"><property name="text"><string>Description:</string></property></widget></item>
+          <item row="4" column="1"><widget class="QLineEdit" name="lineEdit_desc"/></item>
+          <item row="5" column="0"><widget class="QLabel" name="label_app"><property name="text"><string>Application Amount:</string></property></widget></item>
+          <item row="5" column="1"><widget class="QDoubleSpinBox" name="doubleSpinBox_app"/></item>
+          <item row="6" column="0"><widget class="QLabel" name="label_agree"><property name="text"><string>Agree Amount:</string></property></widget></item>
+          <item row="6" column="1"><widget class="QDoubleSpinBox" name="doubleSpinBox_agree"/></item>
+          <item row="7" column="0"><widget class="QLabel" name="label_issue"><property name="text"><string>Issue Assessment:</string></property></widget></item>
+          <item row="7" column="1"><widget class="QCheckBox" name="checkBox_issue"/></item>
+          <item row="8" column="0"><widget class="QLabel" name="label_dispute"><property name="text"><string>Dispute:</string></property></widget></item>
+          <item row="8" column="1"><widget class="QCheckBox" name="checkBox_dispute"/></item>
+          <item row="9" column="0"><widget class="QLabel" name="label_agree2"><property name="text"><string>Agree:</string></property></widget></item>
+          <item row="9" column="1"><widget class="QCheckBox" name="checkBox_agree"/></item>
+          <item row="10" column="0"><widget class="QLabel" name="label_reject"><property name="text"><string>Reject:</string></property></widget></item>
+          <item row="10" column="1"><widget class="QCheckBox" name="checkBox_reject"/></item>
+          <item row="11" column="0"><widget class="QLabel" name="label_remark"><property name="text"><string>Remark:</string></property></widget></item>
+          <item row="11" column="1"><widget class="QTextEdit" name="textEdit_remark"/></item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QWidget" name="docs_group">
+         <layout class="QVBoxLayout" name="docs_vbox">
+          <item><widget class="QTableWidget" name="table_docs"><property name="columnCount"><number>3</number></property></widget></item>
+          <item>
+           <layout class="QHBoxLayout" name="docs_buttons">
+            <item><widget class="QPushButton" name="btn_add_doc_link"><property name="text"><string>Add Document Link</string></property></widget></item>
+            <item><widget class="QPushButton" name="btn_delete_doc_link"><property name="text"><string>Delete Document Link</string></property></widget></item>
+           </layout>
+          </item>
+         </layout>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

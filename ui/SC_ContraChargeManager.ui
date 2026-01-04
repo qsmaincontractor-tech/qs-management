@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>SC_ContraChargeManagerForm</class>
+ <widget class="QWidget" name="SC_ContraChargeManagerForm">
+  <layout class="QHBoxLayout" name="main_layout">
+   <item>
+    <widget class="QSplitter" name="splitter">
+     <property name="orientation"><enum>Qt::Horizontal</enum></property>
+     <widget class="QWidget" name="left_widget">
+      <layout class="QVBoxLayout" name="left_vbox">
+       <item>
+        <widget class="QTableWidget" name="table_ccs">
+         <property name="columnCount"><number>4</number></property>
+        </widget>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="left_buttons">
+         <item><widget class="QPushButton" name="btn_add"><property name="text"><string>Add CC</string></property></widget></item>
+         <item><widget class="QPushButton" name="btn_delete"><property name="text"><string>Delete CC</string></property></widget></item>
+        </layout>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="right_widget">
+      <layout class="QVBoxLayout" name="right_vbox">
+       <item>
+        <widget class="QWidget" name="form_group">
+         <layout class="QFormLayout" name="formLayout">
+          <item row="0" column="0"><widget class="QLabel" name="label_ccno"><property name="text"><string>CC No:</string></property></widget></item>
+          <item row="0" column="1"><widget class="QLineEdit" name="lineEdit_cc_no"/></item>
+          <item row="1" column="0"><widget class="QLabel" name="label_date"><property name="text"><string>Date:</string></property></widget></item>
+          <item row="1" column="1"><widget class="QDateEdit" name="dateEdit_date"/></item>
+          <item row="2" column="0"><widget class="QLabel" name="label_title"><property name="text"><string>Title:</string></property></widget></item>
+          <item row="2" column="1"><widget class="QLineEdit" name="lineEdit_title"/></item>
+          <item row="3" column="0"><widget class="QLabel" name="label_reason"><property name="text"><string>Reason:</string></property></widget></item>
+          <item row="3" column="1"><widget class="QTextEdit" name="textEdit_reason"/></item>
+          <item row="4" column="0"><widget class="QLabel" name="label_agree"><property name="text"><string>Agree Amount:</string></property></widget></item>
+          <item row="4" column="1"><widget class="QDoubleSpinBox" name="doubleSpinBox_agree"/></item>
+          <item row="5" column="0"><widget class="QLabel" name="label_deduct"><property name="text"><string>Deduct To (Subcontract):</string></property></widget></item>
+          <item row="5" column="1"><widget class="QComboBox" name="comboBox_deduct"/></item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QWidget" name="items_group">
+         <layout class="QVBoxLayout" name="items_vbox">
+          <item><widget class="QLabel" name="label_breakdown"><property name="text"><string>Breakdown</string></property></widget></item>
+          <item><widget class="QTableWidget" name="table_items"><property name="columnCount"><number>9</number></property></widget></item>
+          <item>
+           <layout class="QHBoxLayout" name="items_buttons">
+            <item><widget class="QPushButton" name="btn_add_item"><property name="text"><string>Add Item</string></property></widget></item>
+            <item><widget class="QPushButton" name="btn_delete_item"><property name="text"><string>Delete Item</string></property></widget></item>
+           </layout>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QWidget" name="docs_group">
+         <layout class="QVBoxLayout" name="docs_vbox">
+          <item><widget class="QLabel" name="label_docs"><property name="text"><string>Documents</string></property></widget></item>
+          <item><widget class="QTableWidget" name="table_docs"><property name="columnCount"><number>3</number></property></widget></item>
+          <item>
+           <layout class="QHBoxLayout" name="docs_buttons">
+            <item><widget class="QPushButton" name="btn_add_doc"><property name="text"><string>Add Document Link</string></property></widget></item>
+            <item><widget class="QPushButton" name="btn_delete_doc"><property name="text"><string>Delete Document Link</string></property></widget></item>
+           </layout>
+          </item>
+         </layout>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
